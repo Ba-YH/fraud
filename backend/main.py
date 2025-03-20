@@ -363,9 +363,9 @@ def main():
                             target.append(1)
                         elif(k[-1] == minority_label2):
                             target.append(2)
-                        elif(k[-1] == minority_label2):
+                        elif(k[-1] == minority_label3):
                             target.append(3)
-                        elif(k[-1] == minority_label2):
+                        elif(k[-1] == minority_label4):
                             target.append(4)
                         else:
                             target.append(0)
