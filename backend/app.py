@@ -10,6 +10,7 @@ app = Flask(
     static_folder='../frontend/static'
 )
 
+stop_words=[]
 best_model = None
 MODEL_DIR = Path(__file__).parent / "models"
 MODEL_FILENAME = "best_model.dill"
@@ -34,6 +35,15 @@ def load_model() -> None:
         app.logger.error(f"模型加载失败: {str(e)}")
         raise
 
+# 数据预处理，去停用词+分词
+def preprocess_text(text):
+    global stop_words
+    with open("utils/stop_words.txt", "r", encoding="UTF-8") as f:
+        stop_words = set(word.strip() for word in f.readlines())
+
+    words = jieba.lcut(text)
+    return [word for word in words if word not in stop_words]
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -51,7 +61,7 @@ def get_result():
             })
 
         # 在线处理 -> 模型输入 -> 获取预测结果
-        processed_text = process_text(input_text)
+        processed_text = process_text(preprocess_text(input_text))
 
         print(processed_text)
         prediction = best_model.predict(processed_text.reshape(1, -1))

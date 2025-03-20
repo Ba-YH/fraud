@@ -12,6 +12,7 @@ import os
 
 stop_words=[]
 def read_data():
+    global stop_words
     with open("stop_words.txt", "r", encoding="UTF-8") as f:
         stop_words = set(word.strip() for word in f.readlines())
 def preprocess_text(text):
@@ -19,12 +20,12 @@ def preprocess_text(text):
     return [word for word in words if word not in stop_words]
 
 
-def process_text(input_text):
+# 使用处理数据时保存的模型在线处理输入数据
+def process_text(words):
     word2vec_model = Word2Vec.load("models/word2vec.model")
     scaler = joblib.load("models/scaler.pkl")
     pca = joblib.load("models/pca.pkl")
 
-    words = preprocess_text(input_text)
     if not words:
         return np.zeros(word2vec_model.vector_size)
 
@@ -42,6 +43,8 @@ def process_text(input_text):
 
 
 def process_files(args):
+    # 先读取停用词
+    read_data()
     dfs=[]
     for number in args.file_numbers:
         df = pd.read_csv(f"../cleaned_data/label0{number}-last.csv",encoding="UTF-8")
@@ -117,7 +120,7 @@ if __name__ == "__main__":
     # Word2Vec参数
     parser.add_argument("--vector_size",'-vs',type=int,default=100)
     parser.add_argument("--window",type=int,default=5)
-    parser.add_argument("--n_components",'-nc',type=float,default=0.95)
+    parser.add_argument("--n_components",'-nc',type=float,default=0.99)
 
     # 预训练参数
     parser.add_argument("--use_pretrained",'-up',default=False)

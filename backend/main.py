@@ -322,7 +322,7 @@ def main():
         for baseline in ['AHSE']:
             # print(f"baseline: {baseline}\n")
             df = pd.DataFrame(columns=['file_name', 'f1', 'MCC','AUC'])
-            folder_path = '../process_data'  # 文件夹路径
+            folder_path = 'process_data'  # 文件夹路径
 
             for file_name in os.listdir(folder_path):
                 if file_name.endswith('.csv'):  # 筛选出以 .data 结尾的文件
@@ -407,7 +407,7 @@ def main():
                                 best_auc = g_means
                                 best_model = model  # 保存当前最优模型
                             del model
-                            model_filename = f'../models/best_model.dill'  # 可以根据需要修改文件名
+                            model_filename = f'models/best_model.dill'  # 可以根据需要修改文件名
                             with open(model_filename, 'wb') as file:
                                 dill.dump(best_model, file)
 
