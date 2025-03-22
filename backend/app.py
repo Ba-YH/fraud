@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 from datetime import datetime, timedelta
@@ -12,7 +13,7 @@ app = Flask(
     template_folder='../frontend/templates',
     static_folder='../frontend/static'
 )
-
+DEEPSEEK_API_URL = "https://api.deepseek.com"
 # 模型相关
 MODEL_DIR = Path(__file__).parent / "models"
 MODEL_FILENAME = "best_model.dill"
@@ -55,6 +56,7 @@ def save_detection_history(text, result, confidence):
                 history = json.load(f)
 
         history.append({
+            'id': len(history) + 1,
             'text': text,
             'result': result,
             'confidence': confidence,
@@ -69,7 +71,27 @@ def save_detection_history(text, result, confidence):
     except Exception as e:
         app.logger.error(f"保存历史记录失败: {str(e)}")
 
+def delete_detection_history(record_id):
+    """删除检测历史记录"""
+    try:
+        if HISTORY_FILE.exists():
+            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+                history = json.load(f)
 
+            # 过滤掉要删除的记录
+            updated_history = [record for record in history if record['id'] != record_id]
+
+            # 将更新后的历史记录写回文件
+            with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
+                json.dump(updated_history, f, ensure_ascii=False, indent=2)
+
+            return True  # 删除成功
+        else:
+            app.logger.error("历史记录文件不存在")
+            return False  # 文件不存在
+    except Exception as e:
+        app.logger.error(f"删除历史记录失败: {str(e)}")
+        return False  # 删除失败
 @app.route('/')
 def index():
     """首页"""
@@ -104,6 +126,28 @@ def get_history():
         return jsonify({'status': 'success', 'data': []})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
+
+
+@app.route('/delete_record/<int:record_id>', methods=['DELETE'])
+def delete_record(record_id):
+    """删除历史记录API"""
+    try:
+        if HISTORY_FILE.exists():
+            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
+                history = json.load(f)
+
+            # 根据 ID 删除记录
+            history = [record for record in history if record['id'] != record_id]
+
+            # 将更新后的历史记录写回文件
+            with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
+                json.dump(history, f, ensure_ascii=False)
+
+            return '', 204  # 返回204 No Content
+        return jsonify({'status': 'error', 'message': '文件不存在'}), 404
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 
 
 @app.route('/api/statistics')
@@ -254,10 +298,9 @@ def batch_process():
         results = []
         for text in texts:
             processed_text = process_text(preprocess_text(text))
-            prediction = best_model.predict_proba(processed_text.reshape(1, -1))
-            label_idx = prediction.argmax()
-            confidence = float(prediction)
-            app.logger.info(confidence)
+            label,pro= best_model.predict(processed_text.reshape(1, -1))
+            label_idx = label
+            confidence = float(pro)
             result = LABEL_MAPPING[label_idx]
 
             results.append({
@@ -288,6 +331,9 @@ def preprocess_text(text):
 
     words = jieba.lcut(text)
     return [word for word in words if word not in stop_words]
+
+# @app.route('/api/deepseek/generate', methods=['POST'])
+# def deepseek_generate():
 
 
 if __name__ == '__main__':

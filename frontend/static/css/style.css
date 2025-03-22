@@ -33,6 +33,25 @@ body {
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
 }
+.delete-record {
+    margin-left: 10px; /* 添加左边距 */
+}
+
+.header-content {
+    display: flex; /* 设置为弹性盒子 */
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平居中 */
+    justify-content: center; /* 垂直居中 */
+    text-align: center; /* 文本居中对齐 */
+    font-size: 36px; /* 字体大小，增大以突出标题 */
+    font-weight: 700; /* 字体粗细，增大以增强视觉效果 */
+    color: var(--primary-color); /* 字体颜色 */
+    margin-bottom: 40px; /* 底部外边距，增加间距 */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* 添加更明显的阴影效果 */
+    line-height: 1.2; /* 行高，增加可读性 */
+    padding: 20px; /* 内边距，增加空间感 */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1); /* 底部边框，增加分隔感 */
+}
 
 /* Sidebar styles */
 .sidebar {

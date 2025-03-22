@@ -54,6 +54,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+//document.getElementById('deepseek-generate-btn').addEventListener('click', function() {
+//    const inputText = document.getElementById('input-text').value;
+//
+//    if (inputText.trim() === "") {
+//        alert("请输入需要生成欺诈文本的基础内容！");
+//        return;
+//    }
+//
+//    // 发送请求到 DeepSeek 生成欺诈文本的接口
+//    fetch('/api/deepseek/generate', {
+//        method: 'POST',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify({ text: inputText })
+//    })
+//    .then(response => {
+//        if (!response.ok) {
+//            throw new Error('网络响应不是 OK');
+//        }
+//        return response.json();
+//    })
+//    .then(data => {
+//        // 更新文本框以显示生成的欺诈文本
+//        document.getElementById('input-text').value = data.generated_text || "未生成文本";
+//    })
+//    .catch(error => {
+//        console.error('发生错误:', error);
+//        alert('生成欺诈文本失败，请稍后再试。');
+//    });
+//});
+
+
     // 显示检测结果
     function showResult(data) {
         const fraudType = document.getElementById('fraud-type');
@@ -73,16 +106,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // 设置风险等级
         let riskClass = '';
         let riskText = '';
-
-        if (confidence >= 90) {
-            riskClass = 'bg-danger';
-            riskText = '高风险';
-        } else if (confidence >= 70) {
-            riskClass = 'bg-warning text-dark';
-            riskText = '中风险';
+        if (data.result != '非欺诈信息') {
+            if (confidence >= 90) {
+                riskClass = 'bg-danger';
+                riskText = '高风险';
+            } else if (confidence >= 70) {
+                riskClass = 'bg-warning text-dark';
+                riskText = '中风险';
+            } else {
+                riskClass = 'bg-success';
+                riskText = '低风险';
+            }
         } else {
-            riskClass = 'bg-success';
-            riskText = '低风险';
+            if (confidence < 60) {
+                    riskClass = 'bg-danger';
+                    riskText = '高风险';
+               } else if (confidence < 80) {
+                    riskClass = 'bg-warning text-dark';
+                    riskText = '中风险';
+              } else {
+                    riskClass = 'bg-success';
+                    riskText = '低风险';
+             }
         }
 
         riskLevel.className = `badge ${riskClass}`;

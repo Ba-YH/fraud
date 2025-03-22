@@ -34,23 +34,25 @@
             <div class="table-responsive mt-3">
                 <table class="table">
                     <thead>
-                        <tr>
-                            <th>时间</th>
-                            <th>文本内容</th>
-                            <th>检测结果</th>
-                            <th>置信度</th>
-                            <th>风险等级</th>
-                        </tr>
+                    <tr>
+                        <th>序号</th>
+                        <th>时间</th>
+                        <th>文本内容</th>
+                        <th>检测结果</th>
+                        <th>置信度</th>
+                        <th>风险等级</th>
+                        <th>操作</th>
+                    </tr>
                     </thead>
                     <tbody id="history-table">
-                        <tr class="text-center">
-                            <td colspan="5">
-                                <div class="loading">
-                                    <i class='bx bx-loader-alt bx-spin'></i>
-                                    加载中...
-                                </div>
-                            </td>
-                        </tr>
+                    <tr class="text-center">
+                        <td colspan="6">
+                            <div class="loading">
+                                <i class='bx bx-loader-alt bx-spin'></i>
+                                加载中...
+                            </div>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -151,4 +153,5 @@
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/history.js') }}"></script>
+
 {% endblock %}

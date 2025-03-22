@@ -63,8 +63,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">每日检测趋势</h5>
-                    <canvas id="daily-trend-chart"></canvas>
+                    <h5 class="card-title">风险等级分布</h5>
+                    <canvas id="risk-distribution-chart"></canvas>
                 </div>
             </div>
         </div>
@@ -72,11 +72,12 @@
 
     <div class="row mt-4">
         <!-- 风险等级分布 -->
+
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">风险等级分布</h5>
-                    <canvas id="risk-distribution-chart"></canvas>
+                    <h5 class="card-title">每日检测趋势</h5>
+                    <canvas id="daily-trend-chart"></canvas>
                 </div>
             </div>
         </div>
@@ -159,10 +160,14 @@
 
 canvas {
     width: 100% !important;
-    height: 300px !important;
+    height: 500px !important;  /* 调整高度为500px */
+    image-rendering: -webkit-optimize-contrast; /* 提高清晰度 */
+    image-rendering: crisp-edges; /* 提高清晰度 */
+    image-rendering: pixelated; /* 提高清晰度 */
 }
 </style>
 {% endblock %}
+
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>

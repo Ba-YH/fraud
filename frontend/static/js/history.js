@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const historyTable = document.getElementById('history-table');
     const searchInput = document.getElementById('search-input');
     const typeFilter = document.getElementById('type-filter');
     const riskFilter = document.getElementById('risk-filter');
-    const historyTable = document.getElementById('history-table');
     const prevPageBtn = document.getElementById('prev-page');
     const nextPageBtn = document.getElementById('next-page');
     const currentPageSpan = document.getElementById('current-page');
@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
     const itemsPerPage = 10;
 
-    // 获取历史数据
+    // 初始化加载历史记录
+    fetchHistory();
+
     async function fetchHistory() {
         try {
             const response = await fetch('/api/history');
@@ -29,12 +31,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('获取历史记录失败');
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('错误:', error);
             showError('网络错误，请稍后重试');
         }
     }
 
-    // 更新表格显示
     function updateTable() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = Math.min(startIndex + itemsPerPage, filteredHistory.length);
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pageData.length === 0) {
             historyTable.innerHTML = `
                 <tr class="text-center">
-                    <td colspan="5">暂无数据</td>
+                    <td colspan="7">暂无数据</td>
                 </tr>
             `;
             return;
@@ -65,63 +66,70 @@ document.addEventListener('DOMContentLoaded', function() {
         // 填充数据
         pageData.forEach(item => {
             const row = document.createElement('tr');
-
-            // 设置风险等级
-            let riskLevel = '';
-            let riskClass = '';
-            if (item.confidence >= 0.9) {
-                riskLevel = '高风险';
-                riskClass = 'bg-danger';
-            } else if (item.confidence >= 0.7) {
-                riskLevel = '中风险';
-                riskClass = 'bg-warning text-dark';
-            } else {
-                riskLevel = '低风险';
-                riskClass = 'bg-success';
-            }
-
+            const riskLevel = getRiskLevel(item.confidence);
             row.innerHTML = `
+                <td>${item.id}</td>
                 <td>${item.timestamp}</td>
                 <td>${item.text}</td>
                 <td>${item.result}</td>
                 <td>${Math.round(item.confidence * 100)}%</td>
-                <td><span class="badge ${riskClass}">${riskLevel}</span></td>
+                <td><span class="badge ${riskLevel.class}">${riskLevel.label}</span></td>
+                <td>
+                    <button class="btn btn-danger btn-sm delete-record" data-id="${item.id}">删除</button>
+                </td>
             `;
-
             historyTable.appendChild(row);
+        });
+
+        bindDeleteButtons();
+    }
+
+    function getRiskLevel(confidence) {
+        if (confidence >= 0.9) {
+            return { label: '高风险', class: 'bg-danger' };
+        } else if (confidence >= 0.7) {
+            return { label: '中风险', class: 'bg-warning text-dark' };
+        } else {
+            return { label: '低风险', class: 'bg-success' };
+        }
+    }
+
+    function bindDeleteButtons() {
+        const deleteButtons = document.querySelectorAll('.delete-record');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const recordId = this.getAttribute('data-id');
+                if (confirm('确定要删除这条记录吗？')) {
+                    deleteRecord(recordId);
+                }
+            });
         });
     }
 
-    // 应用过滤器
+    async function deleteRecord(recordId) {
+        try {
+            const response = await fetch(`/delete_record/${recordId}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert('记录已删除');
+                fetchHistory(); // 重新加载数据
+            } else {
+                alert('删除失败，请重试');
+            }
+        } catch (error) {
+            console.error('错误:', error);
+            alert('删除失败，请重试');
+        }
+    }
+
     function applyFilters() {
         const searchTerm = searchInput.value.toLowerCase();
         const selectedType = typeFilter.value;
         const selectedRisk = riskFilter.value;
 
         filteredHistory = allHistory.filter(item => {
-            // 文本搜索
             const matchesSearch = item.text.toLowerCase().includes(searchTerm);
-
-            // 类型过滤
             const matchesType = !selectedType || item.result === selectedType;
-
-            // 风险等级过滤
-            let matchesRisk = true;
-            if (selectedRisk) {
-                const confidence = item.confidence;
-                switch (selectedRisk) {
-                    case 'high':
-                        matchesRisk = confidence >= 0.9;
-                        break;
-                    case 'medium':
-                        matchesRisk = confidence >= 0.7 && confidence < 0.9;
-                        break;
-                    case 'low':
-                        matchesRisk = confidence < 0.7;
-                        break;
-                }
-            }
-
+            const matchesRisk = applyRiskFilter(item.confidence, selectedRisk);
             return matchesSearch && matchesType && matchesRisk;
         });
 
@@ -129,11 +137,24 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTable();
     }
 
-    // 显示错误信息
+    function applyRiskFilter(confidence, selectedRisk) {
+        if (!selectedRisk) return true;
+        switch (selectedRisk) {
+            case 'high':
+                return confidence >= 0.9;
+            case 'medium':
+                return confidence >= 0.7 && confidence < 0.9;
+            case 'low':
+                return confidence < 0.7;
+            default:
+                return true;
+        }
+    }
+
     function showError(message) {
         historyTable.innerHTML = `
             <tr class="text-center">
-                <td colspan="5">
+                <td colspan="7">
                     <div class="text-danger">
                         <i class='bx bx-error-circle'></i>
                         ${message}
@@ -162,7 +183,4 @@ document.addEventListener('DOMContentLoaded', function() {
             updateTable();
         }
     });
-
-    // 初始化加载
-    fetchHistory();
 });
