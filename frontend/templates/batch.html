@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}批量检测 - 欺诈信息检测系统{% endblock %}
+
+{% block page_title %}批量检测{% endblock %}
+
+{% block content %}
+<div class="batch-container">
+    <div class="card">
+        <div class="card-body">
+            <div class="file-upload">
+                <div class="upload-area" id="drop-zone">
+                    <i class='bx bx-cloud-upload'></i>
+                    <p>拖拽文件到此处或点击上传</p>
+                    <span class="file-hint">支持 .txt 文件，每行一条文本</span>
+                    <input type="file" id="file-input" accept=".txt" hidden>
+                </div>
+                <div class="selected-file" style="display: none;">
+                    <i class='bx bx-file'></i>
+                    <span class="filename"></span>
+                    <button class="btn btn-link btn-sm remove-file">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+                <button id="upload-btn" class="btn btn-primary mt-3" disabled>
+                    <i class='bx bx-upload'></i>
+                    开始检测
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="results-section" class="card mt-4" style="display: none;">
+        <div class="card-body">
+            <div class="results-header">
+                <h5 class="card-title">检测结果</h5>
+                <button id="export-btn" class="btn btn-outline-primary btn-sm">
+                    <i class='bx bx-download'></i>
+                    导出结果
+                </button>
+            </div>
+            <div class="results-summary">
+                <div class="summary-item">
+                    <span class="label">总计</span>
+                    <span class="value" id="total-count">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">欺诈信息</span>
+                    <span class="value" id="fraud-count">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">欺诈比例</span>
+                    <span class="value" id="fraud-ratio">0%</span>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>文本内容</th>
+                            <th>检测结果</th>
+                            <th>置信度</th>
+                            <th>风险等级</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.batch-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+}
+
+.upload-area i {
+    font-size: 48px;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.upload-area p {
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.file-hint {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.selected-file {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: var(--secondary-color);
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.selected-file i {
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+.remove-file {
+    margin-left: auto;
+    padding: 0;
+    color: #dc3545;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.results-summary {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: var(--secondary-color);
+    border-radius: 8px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summary-item .label {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.summary-item .value {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background: var(--secondary-color);
+    border-bottom: none;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/batch.js') }}"></script>
+{% endblock %}

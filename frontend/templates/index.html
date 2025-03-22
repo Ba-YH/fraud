@@ -1,14 +1,59 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>欺诈信息检测系统</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-</head>
-<body>
-    <h2>欺诈信息检测系统</h2>
-    <textarea id="input-text" rows="5" cols="50"></textarea>
-    <button id="process-btn">开始检测</button>
-    <div id="result-container" style="margin-top:20px;"></div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}首页 - 欺诈信息检测系统{% endblock %}
+
+{% block page_title %}欺诈信息检测{% endblock %}
+
+{% block content %}
+<div class="detection-container">
+    <div class="card">
+        <div class="card-body">
+            <div class="text-input">
+                <textarea id="input-text" class="form-control" rows="5" placeholder="请输入需要检测的文本内容..."></textarea>
+                <div class="input-footer">
+                    <span class="char-count">0/500</span>
+                    <button id="detect-btn" class="btn btn-primary">
+                        <i class='bx bx-search-alt'></i>
+                        开始检测
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="result-section" class="card mt-4" style="display: none;">
+        <div class="card-body">
+            <h5 class="card-title">检测结果</h5>
+            <div class="result-content">
+                <div class="result-item">
+                    <div class="result-label">检测类型：</div>
+                    <div id="fraud-type" class="result-value"></div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">置信度：</div>
+                    <div class="result-value">
+                        <div class="progress">
+                            <div id="confidence-bar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <span id="confidence-value">0%</span>
+                    </div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">风险等级：</div>
+                    <div id="risk-level" class="result-value">
+                        <span class="badge"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="suggestion-box mt-4">
+                <h6>处理建议</h6>
+                <p id="suggestion-text"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/detection.js') }}"></script>
+{% endblock %} 

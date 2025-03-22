@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}数据统计 - 欺诈信息检测系统{% endblock %}
+
+{% block page_title %}数据统计{% endblock %}
+
+{% block content %}
+<div class="statistics-container">
+    <div class="row">
+        <!-- 总览卡片 -->
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-icon">
+                        <i class='bx bx-bar-chart-alt'></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-detections">0</h3>
+                        <p>总检测次数</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-icon warning">
+                        <i class='bx bx-error-circle'></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3><span id="fraud-ratio">0</span>%</h3>
+                        <p>欺诈信息比例</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body">
+                    <div class="stat-icon danger">
+                        <i class='bx bx-shield-quarter'></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="high-risk-count">0</h3>
+                        <p>高风险信息数</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- 欺诈类型分布 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">欺诈类型分布</h5>
+                    <canvas id="type-distribution-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- 每日检测趋势 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">每日检测趋势</h5>
+                    <canvas id="daily-trend-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- 风险等级分布 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">风险等级分布</h5>
+                    <canvas id="risk-distribution-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- 置信度分布 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">置信度分布</h5>
+                    <canvas id="confidence-distribution-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.statistics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+    color: white;
+}
+
+.stat-card .card-body {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.stat-icon i {
+    font-size: 30px;
+}
+
+.stat-icon.warning {
+    background: rgba(255, 193, 7, 0.2);
+}
+
+.stat-icon.danger {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stat-info p {
+    margin: 5px 0 0;
+    opacity: 0.8;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.card-title {
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+canvas {
+    width: 100% !important;
+    height: 300px !important;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
+{% endblock %}

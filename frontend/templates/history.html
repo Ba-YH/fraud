@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}历史记录 - 欺诈信息检测系统{% endblock %}
+
+{% block page_title %}历史记录{% endblock %}
+
+{% block content %}
+<div class="history-container">
+    <div class="card">
+        <div class="card-body">
+            <div class="history-header">
+                <div class="search-box">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="search-input" class="form-control" placeholder="搜索历史记录...">
+                </div>
+                <div class="filter-box">
+                    <select id="type-filter" class="form-select">
+                        <option value="">所有类型</option>
+                        <option value="非欺诈信息">非欺诈信息</option>
+                        <option value="冒充公检法及政府机关类">冒充公检法及政府机关类</option>
+                        <option value="贷款、代办信用卡类">贷款、代办信用卡类</option>
+                        <option value="冒充客服服务">冒充客服服务</option>
+                        <option value="冒充领导、熟人类">冒充领导、熟人类</option>
+                    </select>
+                    <select id="risk-filter" class="form-select">
+                        <option value="">所有风险等级</option>
+                        <option value="high">高风险</option>
+                        <option value="medium">中风险</option>
+                        <option value="low">低风险</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>文本内容</th>
+                            <th>检测结果</th>
+                            <th>置信度</th>
+                            <th>风险等级</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table">
+                        <tr class="text-center">
+                            <td colspan="5">
+                                <div class="loading">
+                                    <i class='bx bx-loader-alt bx-spin'></i>
+                                    加载中...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination-container">
+                <div class="pagination-info">
+                    显示 <span id="start-index">0</span> - <span id="end-index">0</span> 条，共 <span id="total-count">0</span> 条
+                </div>
+                <div class="pagination">
+                    <button class="btn btn-outline-primary btn-sm" id="prev-page" disabled>
+                        <i class='bx bx-chevron-left'></i>
+                        上一页
+                    </button>
+                    <span class="page-info">第 <span id="current-page">1</span> 页</span>
+                    <button class="btn btn-outline-primary btn-sm" id="next-page" disabled>
+                        下一页
+                        <i class='bx bx-chevron-right'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.history-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.history-header {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.search-box {
+    flex: 1;
+    position: relative;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-box input {
+    padding-left: 35px;
+}
+
+.filter-box {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-box select {
+    min-width: 150px;
+}
+
+.loading {
+    padding: 20px;
+    color: #6c757d;
+}
+
+.loading i {
+    margin-right: 8px;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-info {
+    margin: 0 10px;
+}
+
+.table td {
+    vertical-align: middle;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}
