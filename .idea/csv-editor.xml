@@ -38,13 +38,6 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\backend\process_data\label01234-100-5-0.95-False-sgns.wiki.bigram-char.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\backend\process_data\label01234-100-5-0.99-False-sgns.wiki.bigram-char.csv">
           <value>
             <Attribute>

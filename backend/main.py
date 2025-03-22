@@ -28,9 +28,6 @@ import dill
 np.random.seed(42)
 random.seed(42)
 
-METHODS = ['EASE', 'SMOTEBoost', 'SMOTEBoost', 'SMOTEBagging', 'RUSBoost', 'UnderBagging', 'BalanceCascade']
-RANDOM_STATE = 42
-
 warnings.filterwarnings("ignore")
 ar = 1
 

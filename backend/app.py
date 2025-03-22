@@ -13,12 +13,11 @@ app = Flask(
     static_folder='../frontend/static'
 )
 
-
-
 # 模型相关
 MODEL_DIR = Path(__file__).parent / "models"
 MODEL_FILENAME = "best_model.dill"
 best_model = None
+stop_words=[]
 
 # 数据存储
 HISTORY_FILE = Path(__file__).parent / "data" / "history.json"
@@ -200,7 +199,7 @@ def process():
             })
 
         # 文本预处理
-        processed_text = preprocess_text(text)
+        processed_text = process_text(preprocess_text(text))
 
         # 模型预测
         prediction = best_model.predict_proba(processed_text.reshape(1, -1))
@@ -254,11 +253,11 @@ def batch_process():
 
         results = []
         for text in texts:
-            processed_text = preprocess_text(text)
+            processed_text = process_text(preprocess_text(text))
             prediction = best_model.predict_proba(processed_text.reshape(1, -1))
-
             label_idx = prediction.argmax()
-            confidence = float(prediction.max())
+            confidence = float(prediction)
+            app.logger.info(confidence)
             result = LABEL_MAPPING[label_idx]
 
             results.append({
@@ -283,10 +282,12 @@ def batch_process():
 
 
 def preprocess_text(text):
-    """文本预处理函数"""
-    # TODO: 实现文本预处理逻辑
-    # 这里应该实现与训练模型时相同的预处理步骤
-    return np.zeros(18)  # 示例返回，需要根据实际模型的输入要求修改
+    global stop_words
+    with open("utils/stop_words.txt", "r", encoding="UTF-8") as f:
+        stop_words = set(word.strip() for word in f.readlines())
+
+    words = jieba.lcut(text)
+    return [word for word in words if word not in stop_words]
 
 
 if __name__ == '__main__':
