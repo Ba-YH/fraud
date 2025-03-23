@@ -71,27 +71,6 @@ def save_detection_history(text, result, confidence):
     except Exception as e:
         app.logger.error(f"保存历史记录失败: {str(e)}")
 
-def delete_detection_history(record_id):
-    """删除检测历史记录"""
-    try:
-        if HISTORY_FILE.exists():
-            with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
-                history = json.load(f)
-
-            # 过滤掉要删除的记录
-            updated_history = [record for record in history if record['id'] != record_id]
-
-            # 将更新后的历史记录写回文件
-            with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-                json.dump(updated_history, f, ensure_ascii=False, indent=2)
-
-            return True  # 删除成功
-        else:
-            app.logger.error("历史记录文件不存在")
-            return False  # 文件不存在
-    except Exception as e:
-        app.logger.error(f"删除历史记录失败: {str(e)}")
-        return False  # 删除失败
 @app.route('/')
 def index():
     """首页"""
@@ -130,18 +109,22 @@ def get_history():
 
 @app.route('/delete_record/<int:record_id>', methods=['DELETE'])
 def delete_record(record_id):
-    """删除历史记录API"""
+    """删除历史记录API并更新 ID"""
     try:
         if HISTORY_FILE.exists():
             with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
                 history = json.load(f)
 
             # 根据 ID 删除记录
-            history = [record for record in history if record['id'] != record_id]
+            updated_history = [record for record in history if record['id'] != record_id]
+
+            # 更新 ID
+            for index, record in enumerate(updated_history):
+                record['id'] = index + 1  # 从 1 开始更新 ID
 
             # 将更新后的历史记录写回文件
             with open(HISTORY_FILE, 'w', encoding='utf-8') as f:
-                json.dump(history, f, ensure_ascii=False)
+                json.dump(updated_history, f, ensure_ascii=False)
 
             return '', 204  # 返回204 No Content
         return jsonify({'status': 'error', 'message': '文件不存在'}), 404
@@ -297,10 +280,11 @@ def batch_process():
 
         results = []
         for text in texts:
+            print(text)
             processed_text = process_text(preprocess_text(text))
-            label,pro= best_model.predict(processed_text.reshape(1, -1))
-            label_idx = label
-            confidence = float(pro)
+            prediction = best_model.predict_proba(processed_text.reshape(1, -1))
+            label_idx = prediction.argmax()
+            confidence = float(prediction.max())
             result = LABEL_MAPPING[label_idx]
 
             results.append({

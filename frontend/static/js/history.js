@@ -99,27 +99,41 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteButtons.forEach(button => {
             button.addEventListener('click', function() {
                 const recordId = this.getAttribute('data-id');
-                if (confirm('确定要删除这条记录吗？')) {
-                    deleteRecord(recordId);
-                }
+                deleteRecord(recordId);
             });
         });
     }
 
     async function deleteRecord(recordId) {
-        try {
-            const response = await fetch(`/delete_record/${recordId}`, { method: 'DELETE' });
-            if (response.ok) {
-                alert('记录已删除');
-                fetchHistory(); // 重新加载数据
-            } else {
-                alert('删除失败，请重试');
+        // 使用 SweetAlert2 弹出确认框
+        const { isConfirmed } = await Swal.fire({
+            title: '确认删除',
+            text: '您确定要删除这条记录吗？',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '删除',
+            cancelButtonText: '取消'
+        });
+
+        if (isConfirmed) {
+            try {
+                const response = await fetch(`/delete_record/${recordId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    Swal.fire('已删除!', '记录已删除', 'success');
+                    fetchHistory(); // 重新加载数据
+                } else {
+                    Swal.fire('删除失败', '请重试', 'error');
+                }
+            } catch (error) {
+                console.error('错误:', error);
+                Swal.fire('删除失败', '请重试', 'error');
             }
-        } catch (error) {
-            console.error('错误:', error);
-            alert('删除失败，请重试');
+        } else {
+            Swal.fire('已取消', '删除操作已取消', 'info');
         }
     }
+
+
 
     function applyFilters() {
         const searchTerm = searchInput.value.toLowerCase();
