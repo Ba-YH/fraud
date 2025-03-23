@@ -140,6 +140,24 @@ header {
     margin: 0 auto;
 }
 
+.card1 {
+    border: 1px solid #ddd; /* 边框 */
+    border-radius: 8px; /* 圆角 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    margin-bottom: 20px; /* 卡片之间的间距 */
+}
+
+.card-title {
+    font-size: 1.5rem; /* 标题字体大小 */
+    font-weight: bold; /* 加粗 */
+    margin-bottom: 15px; /* 标题与图表之间的间距 */
+}
+
+canvas {
+    max-width: 100%; /* 确保图表宽度自适应 */
+    height: auto; /* 高度自适应 */
+}
+
 .card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
@@ -251,6 +269,22 @@ header {
     transition: 0.3s;
 }
 
+.statistics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
+    color: white;
+}
+
+.stat-card .card-body {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
 [data-theme="dark"] .slider {
     left: 22px;
 }

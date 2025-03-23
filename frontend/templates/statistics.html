@@ -72,9 +72,8 @@
 
     <div class="row mt-4">
         <!-- 风险等级分布 -->
-
         <div class="col-md-6">
-            <div class="card">
+            <div class="card1">
                 <div class="card-body">
                     <h5 class="card-title">每日检测趋势</h5>
                     <canvas id="daily-trend-chart"></canvas>
@@ -83,7 +82,7 @@
         </div>
         <!-- 置信度分布 -->
         <div class="col-md-6">
-            <div class="card">
+            <div class="card1">
                 <div class="card-body">
                     <h5 class="card-title">置信度分布</h5>
                     <canvas id="confidence-distribution-chart"></canvas>
@@ -94,79 +93,7 @@
 </div>
 {% endblock %}
 
-{% block extra_css %}
-<style>
-.statistics-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
 
-.stat-card {
-    background: linear-gradient(135deg, var(--primary-color) 0%, #2980b9 100%);
-    color: white;
-}
-
-.stat-card .card-body {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-}
-
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-}
-
-.stat-icon i {
-    font-size: 30px;
-}
-
-.stat-icon.warning {
-    background: rgba(255, 193, 7, 0.2);
-}
-
-.stat-icon.danger {
-    background: rgba(220, 53, 69, 0.2);
-}
-
-.stat-info h3 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
-}
-
-.stat-info p {
-    margin: 5px 0 0;
-    opacity: 0.8;
-}
-
-.card {
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    height: 100%;
-}
-
-.card-title {
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
-canvas {
-    width: 100% !important;
-    height: 500px !important;  /* 调整高度为500px */
-    image-rendering: -webkit-optimize-contrast; /* 提高清晰度 */
-    image-rendering: crisp-edges; /* 提高清晰度 */
-    image-rendering: pixelated; /* 提高清晰度 */
-}
-</style>
-{% endblock %}
 
 
 {% block extra_js %}
