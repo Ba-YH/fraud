@@ -45,13 +45,7 @@ def process_text(words):
 def process_files(args):
     # 先读取停用词
     read_data()
-    dfs=[]
-    for number in args.file_numbers:
-        df = pd.read_csv(f"../cleaned_data/label0{number}-last.csv",encoding="UTF-8")
-        dfs.append(df)
-
-    # 合并到一个新的dataframe
-    df = pd.concat(dfs,axis=0,ignore_index=True)
+    df = pd.read_csv(f"../dataset/label01234-{args.dataset_type}.csv", encoding="utf-8")
     data = df['content'].apply(preprocess_text)
 
     if args.use_pretrained:
@@ -82,7 +76,7 @@ def process_files(args):
     X_pca = pca.fit_transform(X_scaled)
 
 
-    file_path="../process_data/label"
+    file_path="../process_data/label01234"
     if args.use_pretrained:
         file_path+=''.join(str(num) for num in args.file_numbers)
         file_path+=f"-{args.pretrained_model}-{args.n_components}"
@@ -115,8 +109,8 @@ def process_files(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--file_numbers",type=list,default=[0,1,2,3,4])
-
+    #parser.add_argument("--file_numbers",type=list,default=[0,1,2,3,4])
+    parser.add_argument("--dataset_type",type=str,default="clean")
     # Word2Vec参数
     parser.add_argument("--vector_size",'-vs',type=int,default=100)
     parser.add_argument("--window",type=int,default=5)

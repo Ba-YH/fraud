@@ -18,8 +18,8 @@ def create_prompt(text):
         "content": text
     }
 
-def clean(number):
-    data = pd.read_csv(f"../raw_data/labels.csv")
+def clean():
+    data = pd.read_csv(f"../dataset/label01234-raw.csv")
     contents = data["content"].tolist()
 
     for text in contents:
@@ -34,7 +34,8 @@ def clean(number):
         time.sleep(0.5)
 
     data['label']=cleaned_labels
-    data.to_csv(f"label0{number}-cleaned",index=false)
+    data.to_csv(f"../dataset/label01234-clean.csv",index=false)
 
 if __name__ == "__main__":
     client = OpenAI(api_key=api_key, base_url=base_url)
+    clean()
