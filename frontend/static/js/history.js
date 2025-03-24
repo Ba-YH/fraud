@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 填充数据
         pageData.forEach(item => {
             const row = document.createElement('tr');
-            const riskLevel = getRiskLevel(item.confidence);
+            const riskLevel = getRiskLevel(item.confidence,item.result);
             row.innerHTML = `
                 <td>${item.id}</td>
                 <td>${item.timestamp}</td>
@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         bindDeleteButtons();
     }
 
-    function getRiskLevel(confidence) {
-        if (confidence >= 0.9) {
+    function getRiskLevel(confidence,result) {
+        if ((confidence >= 0.9 & result != '非欺诈信息') | (result == '非欺诈信息' & confidence < 0.6)) {
             return { label: '高风险', class: 'bg-danger' };
-        } else if (confidence >= 0.7) {
+        } else if ((confidence >= 0.7 & result != '非欺诈信息') | (result == '非欺诈信息' & confidence < 0.8)) {
             return { label: '中风险', class: 'bg-warning text-dark' };
         } else {
             return { label: '低风险', class: 'bg-success' };
