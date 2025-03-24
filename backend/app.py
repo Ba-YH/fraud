@@ -6,6 +6,7 @@ import json
 import dill
 import numpy as np
 from pathlib import Path
+import time
 from backend.utils.process import *
 
 app = Flask(
@@ -250,7 +251,70 @@ def process():
             'message': '内部服务器错误'
         })
 
+# 兼容OpenAI 的接口
+@app.route('/v1/chat/completions', methods=['POST'])
+def chat_completions():
+    try:
+        data = request.json
+        messages = data.get("messages", [])
 
+        # 校验输入
+        if not messages or not all("content" in msg for msg in messages):
+            return jsonify({
+                "error": {
+                    "message": "Invalid messages format. Must include 'content' in messages.",
+                    "type": "invalid_request_error"
+                }
+            }), 400
+
+        # 提取用户最新消息
+        user_message = messages[-1].get("content")
+        if not user_message:
+            return jsonify({
+                "error": {
+                    "message": "Empty content in user message.",
+                    "type": "invalid_request_error"
+                }
+            }), 400
+
+        processed_text = process_text(preprocess_text(user_message))
+        prediction = best_model.predict_proba(processed_text.reshape(1, -1))
+        label_idx = prediction.argmax()
+        confidence = float(prediction.max())
+        result = LABEL_MAPPING.get(label_idx, "未知")
+
+        # 构造标准 ChatCompletion 响应
+        response = {
+            "id": f"chatcmpl-{int(time.time())}",
+            "object": "chat.completion",  # 必须是 chat.completion
+            "created": int(time.time()),
+            "model": "best_model",
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": result
+                    },
+                    "finish_reason": "stop"
+                }
+            ],
+            "usage": {
+                "prompt_tokens": len(user_message.split()),
+                "completion_tokens": len(result.split()),
+                "total_tokens": len(user_message.split()) + len(result.split())
+            }
+        }
+        return jsonify(response)
+
+    except Exception as e:
+        app.logger.error(f"Internal server error: {str(e)}")
+        return jsonify({
+            "error": {
+                "message": "Internal server error",
+                "type": "internal_server_error"
+            }
+        }), 500
 @app.route('/batch_process', methods=['POST'])
 def batch_process():
     """处理批量文本检测"""
