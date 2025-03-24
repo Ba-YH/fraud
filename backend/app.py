@@ -107,6 +107,9 @@ def get_history():
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
 
+@app.route('/docs')
+def api_docs():
+    return render_template('api_docs.html')
 
 @app.route('/delete_record/<int:record_id>', methods=['DELETE'])
 def delete_record(record_id):

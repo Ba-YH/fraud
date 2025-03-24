@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}API 文档{% endblock %}
+{% block page_title %}API 文档{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    <!-- 首次调用 API -->
+    <div class="row">
+        <div class="col-12">
+            <p>
+                本模型 API 与 OpenAI 相似，你可以使用 OpenAI SDK 来调用 DeepSeek API。
+            </p>
+        </div>
+    </div>
+
+    <!-- 参数说明表格 -->
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>PARAM</th>
+                        <th>VALUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>base_url</td>
+                        <td>https://xxx</td>
+                    </tr>
+                    <tr>
+                        <td>api_key</td>
+                        <td>Apply for an API key</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 调用方式 API -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h2>调用方式 API</h2>
+            <p>下面展示如何使用 <strong>DeepSeek API Key</strong> 进行请求的示例。</p>
+        </div>
+    </div>
+
+    <!-- 标签页 -->
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="apiTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="curl-tab" data-bs-toggle="tab" data-bs-target="#curl" type="button" role="tab" aria-controls="curl" aria-selected="true">
+                        curl
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="python-tab" data-bs-toggle="tab" data-bs-target="#python" type="button" role="tab" aria-controls="python" aria-selected="false">
+                        python
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="node-tab" data-bs-toggle="tab" data-bs-target="#node" type="button" role="tab" aria-controls="node" aria-selected="false">
+                        nodejs
+                    </button>
+                </li>
+            </ul>
+
+
+            <!-- python -->
+            <div class="tab-pane fade" id="python" role="tabpanel" aria-labelledby="python-tab">
+
+                <pre><code class="language-python">
+                </code></pre>
+            </div>
+
+            <!-- nodejs -->
+            <div class="tab-pane fade" id="node" role="tabpanel" aria-labelledby="node-tab">
+                <pre><code class="language-javascript">
+                </code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

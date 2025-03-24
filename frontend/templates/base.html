@@ -42,6 +42,13 @@
                     <span>数据统计</span>
                 </a>
             </li>
+            <!-- TODO 接口文档这里删除-->
+            <li>
+                <a href="{{ url_for('api_docs') }}" class="{% if request.endpoint == 'api_docs' %}active{% endif %}">
+                    <i class='bx bx-book'></i>
+                    <span>接口文档</span>
+                </a>
+            </li>
         </ul>
         <!-- 侧边栏底部 -->
         <div class="sidebar-footer">
