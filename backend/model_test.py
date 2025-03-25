@@ -127,7 +127,7 @@ def main():
                             gmeans_all.append(g_means)
                             del model
 
-                    metrics = {'baseline': file_name,
+                    metrics = {'baseline': baseline,
                                'f1': f'{np.mean(f1_all):.3f} ',
                                'MCC': f'{np.mean(MCC):.3f} ',
                                'AUC': f'{np.mean(auc_all):.3f} ',
