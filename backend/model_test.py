@@ -24,7 +24,7 @@ from imbens.ensemble import SMOTEBoostClassifier
 from imbens.ensemble import RUSBoostClassifier
 from main import AHSE
 import pandas as pd
-
+from flip_labels import flip_labels
 
 np.random.seed(42)
 random.seed(42)
@@ -95,25 +95,22 @@ def main():
                         for train_index, test_index in sss.split(X, y):
                             X_train, X_test = X[train_index], X[test_index]
                             y_train, y_test = y[train_index], y[test_index]
+                            # y_train = flip_labels(y_train, flip_rate=0.1)
                             if baseline == 'SMOTEBagging':
-                                model = SMOTEBaggingClassifier(estimator=DecisionTreeClassifier(), n_estimators=ff,
-                                                               random_state=42)
+                                model = SMOTEBaggingClassifier(estimator=DecisionTreeClassifier(), n_estimators=ff)
                             elif baseline == 'SMOTEBoost':
-                                model = SMOTEBoostClassifier(estimator=DecisionTreeClassifier(), n_estimators=ff,
-                                                             random_state=42)
+                                model = SMOTEBoostClassifier(estimator=DecisionTreeClassifier(), n_estimators=ff)
                             elif baseline == 'RUSBoost':
                                 model = RUSBoostClassifier(DecisionTreeClassifier(), n_estimators=ff,
-                                                           algorithm='SAMME.R',
-                                                           random_state=42)
-                            # model = EasyEnsembleClassifier(n_estimators=10, random_state=42)
+                                                           algorithm='SAMME.R')
                             elif baseline == 'BalancedBagging':
                                 model = BalancedBaggingClassifier(DecisionTreeClassifier(), n_estimators=ff,
                                                                   sampling_strategy='auto',
-                                                                  replacement=False, random_state=42)
+                                                                  replacement=False)
                             elif baseline == 'BalancedRandomForest':
-                                model = BalancedRandomForestClassifier(n_estimators=ff, random_state=42)
+                                model = BalancedRandomForestClassifier(n_estimators=ff)
                             elif baseline == 'Adaboost':
-                                model = AdaBoostClassifier(DecisionTreeClassifier(), n_estimators=ff, learning_rate=1.0,random_state=42)
+                                model = AdaBoostClassifier(DecisionTreeClassifier(), n_estimators=ff, learning_rate=1.0)
                             model.fit(X_train,y_train)
                             y_pred= model.predict(X_test)
                             y_pred_proba = model.predict_proba(X_test)

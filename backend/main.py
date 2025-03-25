@@ -25,6 +25,7 @@ from imblearn.over_sampling import SMOTE
 from overSample import mySMOTE
 import joblib  # 或者使用 pickle
 import dill
+from flip_labels import flip_labels
 np.random.seed(42)
 random.seed(42)
 
@@ -243,12 +244,6 @@ class AHSE(BaseEstimator, ClassifierMixin):
                 index = index1
                 new_maj_x_ = X_maj[index]
                 new_maj_y_ = np.full(new_maj_x_.shape[0], y_maj[0])
-                # smote = RandomOverSampler()
-                # smote = ADASYN()
-                smote = BorderlineSMOTE()
-                # smote = SMOTEN()
-                # smote = SVMSMOTE()
-                # smote = SMOTE()
                 # X_, y_ =np.vstack([new_maj_x_, X_min]),np.hstack([new_maj_y_, y_min])
                 smote= mySMOTE()
                 X_,y_ = smote.fit_resample(np.vstack([new_maj_x_, X_min]), np.hstack([new_maj_y_, y_min]))
@@ -379,6 +374,7 @@ def main():
                         for train_index, test_index in sss.split(X, y):
                             X_train, X_test = X[train_index], X[test_index]
                             y_train, y_test = y[train_index], y[test_index]
+                            # y_train = flip_labels(y_train, flip_rate=0.1)
                             model = AHSE(base_estimator=DecisionTreeClassifier(),
                                          n_estimators=ff,
                                          ar=1)
@@ -416,7 +412,7 @@ def main():
                     new_row_df = pd.DataFrame([metrics])
                     df = pd.concat([df, new_row_df], ignore_index=True)
 
-            df.to_excel(f'f-2.xlsx', index=False)
+            df.to_excel(f'test.xlsx', index=False)
 
     return
 
