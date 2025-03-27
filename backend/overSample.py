@@ -8,8 +8,7 @@ from sklearn.neighbors import NearestNeighbors
 from scipy.spatial.distance import cdist
 
 
-class mySMOTE:
-
+class FD_SMOTE:
     def cal_w(self, Minority_data, k):
 
         MinorityKNN=NearestNeighbors(n_neighbors=k+1, algorithm='kd_tree').fit(Minority_data)
@@ -146,6 +145,6 @@ if __name__=='__main__':
         [[1, 1], [2, 1], [3, 1], [2, 2], [1, 3], [2, 3], [3, 3], [1, 4], [1, 5], [2, 5], [5, 1], [5, 2], [3.5, 3],
          [5.5, 3], [6, 3], [7, 3], [5, 4], [5, 5], [7, 5], [4, 4], [4, 5], [4, 6]])
     y=np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2])
-    overSampler=mySMOTE()
+    overSampler=FD_SMOTE()
     X_my,y_my=overSampler.fit_resample(X, y,k=2)
     print(y_my)

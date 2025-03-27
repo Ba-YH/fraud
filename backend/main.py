@@ -22,7 +22,7 @@ from imblearn.over_sampling import BorderlineSMOTE
 from imblearn.over_sampling import SMOTEN
 from imblearn.over_sampling import SVMSMOTE
 from imblearn.over_sampling import SMOTE
-from overSample import mySMOTE
+from overSample import FD_SMOTE
 import joblib  # 或者使用 pickle
 import dill
 from flip_labels import flip_labels
@@ -33,7 +33,7 @@ warnings.filterwarnings("ignore")
 ar = 1
 
 
-class AHSE(BaseEstimator, ClassifierMixin):
+class Fraud_detection(BaseEstimator, ClassifierMixin):
     base_estimator = DecisionTreeClassifier()
     def __init__(self,
                  base_estimator=DecisionTreeClassifier(),
@@ -245,7 +245,7 @@ class AHSE(BaseEstimator, ClassifierMixin):
                 new_maj_x_ = X_maj[index]
                 new_maj_y_ = np.full(new_maj_x_.shape[0], y_maj[0])
                 # X_, y_ =np.vstack([new_maj_x_, X_min]),np.hstack([new_maj_y_, y_min])
-                smote= mySMOTE()
+                smote= FD_SMOTE()
                 X_,y_ = smote.fit_resample(np.vstack([new_maj_x_, X_min]), np.hstack([new_maj_y_, y_min]))
                 clf = self.fit_base_estimator(X_, y_)
                 y_pred = clf.predict(X)
@@ -375,7 +375,7 @@ def main():
                             X_train, X_test = X[train_index], X[test_index]
                             y_train, y_test = y[train_index], y[test_index]
                             # y_train = flip_labels(y_train, flip_rate=0.1)
-                            model = AHSE(base_estimator=DecisionTreeClassifier(),
+                            model = Fraud_detection(base_estimator=DecisionTreeClassifier(),
                                          n_estimators=ff,
                                          ar=1)
                             # model_filename = 'best_model.dill'
