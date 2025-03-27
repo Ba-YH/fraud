@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome to Movie recommendation system</title>
+</head>
+<body>
+<shell>
+  <h2>Welcome To the Fraud Detection System
+    <div class="mask">
+      <a href="/index" data-show>Fraud Detection</a>
+      <a href="/index">Fraud Detection</a>
+    </div>
+  </h2>
+</shell>
+
+</body>
+<style>
+    /* 设置外层容器样式 */
+    shell{
+        width: 100%;
+        /* 设置外层容器的宽度为100% */
+        height: 100vh;
+        /* 设置外层容器的高度为视口高度 */
+        display: flex;
+        /* 设置外层容器为flex布局 */
+        align-items: center;
+        /* 垂直居中对齐 */
+        justify-content: center;
+        /*background-size: cover;*/
+    }
+    :root{
+        --offset:6px;
+    }
+    body{
+        /*background: url(./img/bg.png) no-repeat center center fixed;*/
+    }
+
+    h2{
+        width:980px;
+        font-size: 100px;
+        font-family: Helvetica;
+        line-height: 1.06;
+        letter-spacing: -0.02em;
+        color: #1d1d1f;
+    }
+
+    .mask{
+        height: 106px;
+        position: relative;
+        overflow: hidden;
+        margin-top: var(--offset);
+    }
+    .mask a{
+        display: block;
+        box-sizing: border-box;
+        position: absolute;
+        top: 100px;
+        padding-bottom: var(--offset);
+
+        background-size: 100% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        background-repeat: no-repeat;
+    }
+    .mask a[data-show]{
+        transform: translateY(-100%);
+        transition: .5s transform ease-in-out;
+    }
+
+    .mask a[data-up]{
+        transform: translateY(-200%);
+        transition: .5s transform ease-in-out;
+    }
+
+    .mask a:nth-child(1){
+        background-image: linear-gradient(45deg, #07a6f1, 50%, #8a7cfb);
+    }
+
+    .mask a:nth-child(2){
+        background-image: linear-gradient(45deg, #18e198, 50%, #32c15d);
+    }
+
+    .mask a:nth-child(3){
+        background-image: linear-gradient(45deg, #fa7671, 50%, #f45f7f);
+    }
+</style>
+
+<script>
+    setInterval(function () {
+        const show = document.querySelector('a[data-show]');
+        const next = show.nextElementSibling || document.querySelector('a:first-child');
+        const up = document.querySelector('a[data-up]');
+
+        if (up) {
+            up.removeAttribute('data-up');
+        }
+
+        show.removeAttribute('data-show');
+        show.setAttribute('data-up', '');
+        next.setAttribute('data-show', '');
+    }, 2000);
+</script>
+</html>

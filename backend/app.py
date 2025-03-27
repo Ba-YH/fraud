@@ -73,11 +73,14 @@ def save_detection_history(text, result, confidence):
         app.logger.error(f"保存历史记录失败: {str(e)}")
 
 @app.route('/')
+def welcome():
+    """首页"""
+    return render_template('welcome.html')
+
+@app.route('/index')
 def index():
     """首页"""
     return render_template('index.html')
-
-
 @app.route('/batch')
 def batch_detect():
     """批量检测页面"""
