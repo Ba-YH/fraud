@@ -285,6 +285,7 @@ canvas {
     align-items: center;
     padding: 20px;
 }
+
 [data-theme="dark"] .slider {
     left: 22px;
 }

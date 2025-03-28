@@ -81,6 +81,15 @@ def welcome():
 def index():
     """首页"""
     return render_template('index.html')
+
+@app.route('/figure')
+def figure():
+    """首页"""
+    return render_template('figure.html')
+@app.route('/model')
+def model():
+    """首页"""
+    return render_template('Model.html')
 @app.route('/batch')
 def batch_detect():
     """批量检测页面"""
