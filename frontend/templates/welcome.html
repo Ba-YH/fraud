@@ -1,107 +1,457 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome to Movie recommendation system</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能模型介绍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-<shell>
-  <h2>Welcome To the Fraud Detection System
-    <div class="mask">
-      <a href="/index" data-show>欺诈检测系统</a>
-      <a href="/figure">需求分析</a>
-        <a href="/model">模型介绍</a>
-    </div>
-  </h2>
-</shell>
-
-</body>
 <style>
-    /* 设置外层容器样式 */
-    shell{
-        width: 100%;
-        /* 设置外层容器的宽度为100% */
-        height: 100vh;
-        /* 设置外层容器的高度为视口高度 */
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --accent-color: #4cc9f0;
+        --dark-color: #2b2d42;
+        --light-color: #f8f9fa;
+        --success-color: #4ad66d;
+        --warning-color: #f8961e;
+        --danger-color: #ef233c;
+        --border-radius: 8px;
+        --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.8;
+        margin: 0;
+        padding: 0;
+        background-color: var(--light-color);
+        color: var(--dark-color);
+    }
+
+    .container {
+        width: 85%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 1.5rem 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .header-content {
         display: flex;
-        /* 设置外层容器为flex布局 */
+        justify-content: space-between;
         align-items: center;
-        /* 垂直居中对齐 */
-        justify-content: center;
-        /*background-size: cover;*/
-    }
-    :root{
-        --offset:6px;
-    }
-    body{
-        /*background: url(./img/bg.png) no-repeat center center fixed;*/
     }
 
-    h2{
-        width:980px;
-        font-size: 100px;
-        font-family: Helvetica;
-        line-height: 1.06;
-        letter-spacing: -0.02em;
-        color: #1d1d1f;
+    .logo {
+        display: flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: 700;
     }
 
-    .mask{
-        height: 106px;
+    .logo i {
+        margin-right: 10px;
+        color: var(--accent-color);
+    }
+
+    nav ul {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    nav li {
+        margin-left: 2rem;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 0.5rem 0;
         position: relative;
-        overflow: hidden;
-        margin-top: var(--offset);
+        transition: var(--transition);
     }
-    .mask a{
-        display: block;
-        box-sizing: border-box;
+
+    nav a:hover {
+        color: var(--accent-color);
+    }
+
+    nav a::after {
+        content: '';
         position: absolute;
-        top: 120px;
-        padding-bottom: var(--offset);
-
-        background-size: 100% 100%;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-fill-color: transparent;
-        background-repeat: no-repeat;
-    }
-    .mask a[data-show]{
-        transform: translateY(-100%);
-        transition: .5s transform ease-in-out;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--accent-color);
+        transition: var(--transition);
     }
 
-    .mask a[data-up]{
-        transform: translateY(-200%);
-        transition: .5s transform ease-in-out;
+    nav a:hover::after {
+        width: 100%;
     }
 
-    .mask a:nth-child(1){
-        background-image: linear-gradient(45deg, #07a6f1, 50%, #8a7cfb);
+    .hero {
+        background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(63, 55, 201, 0.9)), url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 5rem 0;
+        text-align: center;
+        margin-bottom: 3rem;
     }
 
-    .mask a:nth-child(2){
-        background-image: linear-gradient(45deg, #18e198, 50%, #32c15d);
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        animation: fadeInDown 1s ease;
     }
 
-    .mask a:nth-child(3){
-        background-image: linear-gradient(45deg, #fa7671, 50%, #f45f7f);
+    .hero p {
+        font-size: 1.2rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        animation: fadeInUp 1s ease;
     }
-</style>
 
-<script>
-    setInterval(function () {
-        const show = document.querySelector('a[data-show]');
-        const next = show.nextElementSibling || document.querySelector('a:first-child');
-        const up = document.querySelector('a[data-up]');
+    .btn {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 0.8rem 1.8rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+        box-shadow: 0 4px 15px rgba(76, 201, 240, 0.4);
+        animation: fadeIn 1.5s ease;
+    }
 
-        if (up) {
-            up.removeAttribute('data-up');
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(76, 201, 240, 0.5);
+    }
+
+    section {
+        padding: 4rem 0;
+    }
+
+    .section-title {
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .section-title h1 {
+        font-size: 2.5rem;
+        color: var(--dark-color);
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+    .section-title h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 2px;
+    }
+
+    .section-title p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .model-card {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: var(--transition);
+    }
+
+    .model-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .model-card h2 {
+        color: var(--primary-color);
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .model-card h2 i {
+        margin-right: 10px;
+        color: var(--accent-color);
+    }
+
+    .model-card p {
+        color: #555;
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+    .image-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 2rem 0;
+        gap: 2%;
+    }
+
+    .image-container img {
+        width: 49%;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+        margin-bottom: 2%;
+    }
+
+    .image-container img:hover {
+        transform: scale(1.02);
+    }
+
+    .feature-list {
+        margin: 1.5rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .feature-list li {
+        margin-bottom: 0.8rem;
+        position: relative;
+        list-style-type: none;
+    }
+
+    .feature-list li::before {
+        content: '✓';
+        color: var(--success-color);
+        font-weight: bold;
+        position: absolute;
+        left: -1.5rem;
+    }
+
+    footer {
+        background: var(--dark-color);
+        color: white;
+        padding: 3rem 0 1.5rem;
+        text-align: center;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .social-links {
+        margin: 1.5rem 0;
+    }
+
+    .social-links a {
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 10px;
+        transition: var(--transition);
+    }
+
+    .social-links a:hover {
+        color: var(--accent-color);
+        transform: translateY(-3px);
+    }
+
+    .copyright {
+        margin-top: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            text-align: center;
         }
 
-        show.removeAttribute('data-show');
-        show.setAttribute('data-up', '');
-        next.setAttribute('data-show', '');
-    }, 2000);
-</script>
+        nav ul {
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 0.8rem;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+        }
+
+        .image-container {
+            flex-direction: column;
+        }
+
+        .image-container img {
+            width: 100%;
+        }
+
+        .section-title h1 {
+            font-size: 2rem;
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+<body>
+<header>
+  <div class="container header-content">
+    <div class="logo">
+      <img src="../static/images/favicon.png" alt="logo" width="50">
+      <p>Welcome To the Fraud Detection System</p>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="/">首页</a></li>
+        <li><a href="/index">检测系统</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <h1>先进欺诈检测模型</h1>
+    <p>我们提供基于最新人工智能技术的解决方案，帮助您从数据中辨别欺诈信息</p>
+    <a href="/index" class="btn">进入检测系统</a>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-title">
+    <h1>数据处理模型</h1>
+    <p>我们采用先进的自然语言处理技术，将原始数据转化为有价值的语义表征</p>
+  </div>
+
+  <div class="model-card">
+    <h2><i class="fas fa-database"></i> Word2Vec 语义建模</h2>
+    <p>经过LLM清洗后的数据进入Word2Vec建模阶段，模型基于训练数据采用CBOW模型，通过上下文预测目标词的方式学习词语的语义表征，使语义相近的词语在向量空间中保持较小余弦距离。针对数据特性，模型保留所有出现过的词语，避免低频欺诈术语被过滤。</p>
+
+    <div class="image-container">
+      <img src="../static/images/img_1.png" alt="数据处理模型示意图">
+    </div>
+
+    <h3>主要特点：</h3>
+    <ul class="feature-list">
+      <li>基于CBOW的高效训练模型</li>
+      <li>保留所有词汇，不丢失低频术语</li>
+      <li>优化的向量空间语义表征</li>
+      <li>支持大规模并行处理</li>
+    </ul>
+  </div>
+</section>
+
+<section class="container">
+  <div class="section-title">
+    <h1>检测模型</h1>
+    <p>基于双源欠采样和过采样的集成学习方法，提供高精度的检测能力</p>
+  </div>
+
+  <div class="model-card">
+    <h2><i class="fas fa-shield-alt"></i> 算法设计</h2>
+    <p>我们的检测模型采用创新的集成学习方法，结合双源欠采样和过采样技术，有效解决了类别不平衡问题，显著提升了模型在少数类样本上的检测性能。</p>
+
+    <div class="image-container">
+      <img src="../static/images/img_2.png" alt="检测模型流程图">
+      <img src="../static/images/img_3.png" alt="检测模型算法示意图">
+    </div>
+
+    <h3>技术优势：</h3>
+    <ul class="feature-list">
+      <li>创新的双源采样策略</li>
+      <li>高效的集成学习框架</li>
+      <li>优化的类别权重分配</li>
+      <li>可解释的检测结果</li>
+    </ul>
+  </div>
+</section>
+
+
+<section class="container">
+  <div class="section-title">
+    <h1>需求分析</h1>
+  </div>
+
+  <div class="model-card">
+    <h2><i class="fas fa-shield-alt"></i> 电信欺诈检测系统</h2>
+    <p>随着互联网技术的普及，网络欺诈手段日益猖獗，从电信诈骗、钓鱼网站到社交媒体虚假信息，严重威胁个人隐私安全与社会稳定。据统计，2024年全球因诈骗造成的经济损失已突破1万亿美元，亚洲地区还成为了重灾区。而传统的人工审核效率低下且误报率高，随着生成式AI技术的滥用，显然难以应对海量信息的检测需求。本作品的设计灵感于对这一社会痛点的深度观察，旨在通过联合自然语言处理技术、机器学习以及当下新兴的大模型技术构建一套较为高效和精准的欺诈信息检测系统，能够识别潜在的欺诈信息，提升信息安全性，减少用户受骗风险。</p>
+
+    <div class="image-container">
+      <img src="../static/images/img.png" alt="需求分析图">
+    </div>
+
+  </div>
+</section>
+<footer>
+  <div class="container footer-content">
+    <div class="logo">
+      <img src="../static/images/favicon.png" alt="logo" width="50">
+      <span>电信欺诈检测系统</span>
+    </div>
+<!--    <div class="social-links">-->
+<!--      <a href="#"><i class="fab fa-github"></i></a>-->
+<!--      <a href="#"><i class="fab fa-linkedin"></i></a>-->
+<!--      <a href="#"><i class="fab fa-twitter"></i></a>-->
+<!--      <a href="#"><i class="fab fa-weixin"></i></a>-->
+<!--    </div>-->
+    <div class="copyright">
+      &copy; 2025 电信欺诈检测系统. 保留所有权利.
+    </div>
+  </div>
+</footer>
+</body>
 </html>
