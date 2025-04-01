@@ -269,6 +269,29 @@ def process():
 # 兼容OpenAI 的接口
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
+    # 检查 API KEY 是否有效
+    VALID_API_KEYS=[]
+    with open("data/api_key.txt", "r") as f:
+        VALID_API_KEYS = [line.strip() for line in f if line.strip()]
+
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
+        return jsonify({
+            "error": {
+                "message": "Missing API key",
+                "type": "invalid_request_error"
+            }
+        }), 401
+
+    api_key = auth_header.split(" ")[1]
+    if api_key not in VALID_API_KEYS:
+        return jsonify({
+            "error": {
+                "message": "Invalid API key",
+                "type": "invalid_request_error"
+            }
+        }),401
+
     try:
         data = request.json
         messages = data.get("messages", [])
@@ -296,7 +319,7 @@ def chat_completions():
         prediction = best_model.predict_proba(processed_text.reshape(1, -1))
         label_idx = prediction.argmax()
         confidence = float(prediction.max())
-        result = LABEL_MAPPING.get(label_idx, "未知")
+        result = [LABEL_MAPPING.get(label_idx, "未知"),confidence]
 
         # 构造标准 ChatCompletion 响应
         response = {
@@ -309,7 +332,7 @@ def chat_completions():
                     "index": 0,
                     "message": {
                         "role": "assistant",
-                        "content": result
+                        "content": result,
                     },
                     "finish_reason": "stop"
                 }
