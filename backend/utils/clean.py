@@ -4,10 +4,15 @@ import openai
 import pandas as pd
 from openai import OpenAI
 
-# 配置信息
-model_name = "deepseek-chat"
+# LLM 配置信息
+model_name = "deepseek-reasoner"
 base_url="https://api.deepseek.com"
 api_key="sk-56b66cad3490428dab565396bb33a0bd"
+
+# 数据文件信息
+source_data_path="../dataset/label01234-raw.csv"
+target_data_path="../dataset/label01234-clean.csv"
+
 
 def create_prompt(text):
     system_prompt = """
@@ -15,7 +20,7 @@ def create_prompt(text):
 
 请对以下文本进行分类，判断其属于以下五类中的哪一类：
 
-1. "0" - 非欺诈信息
+1. "非欺诈信息"
    - 特征：不涉及任何欺诈行为，属于正常交流或合法商业活动
 
 2. "冒充公检法及政府机关类"
@@ -35,7 +40,7 @@ def create_prompt(text):
    - 示例："我是张总，正在开会，急需转账8万元到这个账户"
 
 **输出要求**：
-1. 仅输出对应标签编号或名称（如"0"或"冒充客服服务"）
+1. 仅输出对应标签编号或名称（如"非欺诈信息"或"冒充客服服务"）
 2. 不需要任何解释或附加内容
 """
     return [
@@ -44,7 +49,9 @@ def create_prompt(text):
     ]
 
 def clean():
-    data = pd.read_csv(f"../dataset/label01234-raw.csv")
+    # cnt=0
+    clean_labels=[]
+    data = pd.read_csv(source_data_path)
     contents = data["content"].tolist()
 
     for text in contents:
@@ -55,12 +62,23 @@ def clean():
             messages=prompt,
             stream=False
         )
-        clean_labels.append(response.choices[0].message.content)
+        response=response.choices[0].message.content;
+        clean_labels.append(response)
         time.sleep(0.5)
 
+        # print("待检测文本："+text)
+        # print("LLM 预测标签："+response)
+        # line=""
+        # for i in range(1, 100):
+        #     line+="- "
+        # print(line+"\n")
+
     data['label']=cleaned_labels
-    data.to_csv(f"../dataset/label01234-clean.csv",index=false)
+    data.to_csv(target_data_path,index=false)
 
 if __name__ == "__main__":
-    client = OpenAI(api_key=api_key, base_url=base_url)
+    client = OpenAI(
+        api_key=api_key,
+        base_url=base_url
+    )
     clean()
