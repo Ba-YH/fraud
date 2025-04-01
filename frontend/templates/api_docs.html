@@ -5,82 +5,190 @@
 {% block content %}
 <div class="container my-4">
 
-    <!-- 首次调用 API -->
-    <div class="row">
-        <div class="col-12">
-            <p>
-                本模型 API 与 OpenAI 相似，你可以使用 OpenAI SDK 来调用 DeepSeek API。
-            </p>
+  <!-- API概览 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">API 兼容性</h5>
+          <p class="card-text">
+            DeepSeek API 完全兼容 OpenAI API v1.0 标准，支持以下客户端：
+            <span class="badge bg-primary mx-1">OpenAI Python SDK</span>
+            <span class="badge bg-primary mx-1">OpenAI Node.js SDK</span>
+            <span class="badge bg-primary mx-1">Postman</span>
+          </p>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- 参数说明表格 -->
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>PARAM</th>
-                        <th>VALUE</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>base_url</td>
-                        <td>https://xxx</td>
-                    </tr>
-                    <tr>
-                        <td>api_key</td>
-                        <td>Apply for an API key</td>
-                    </tr>
-                </tbody>
-            </table>
+  <!-- 快速启动 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h3 class="border-bottom pb-2">快速启动</h3>
+    </div>
+  </div>
+<!--      &lt;!&ndash; 参数配置 &ndash;&gt;-->
+<!--  <div class="row mb-4">-->
+<!--    <div class="col-md-6">-->
+<!--      <div class="card">-->
+<!--        <div class="card-header">基础配置</div>-->
+<!--        <table class="table table-striped mb-0">-->
+<!--          <tbody>-->
+<!--            <tr>-->
+<!--              <td class="fw-bold">API 地址</td>-->
+<!--              <td><code>https://api.deepseek.com</code></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="fw-bold">认证方式</td>-->
+<!--              <td><code>Bearer Token</code></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="fw-bold">SDK 初始化</td>-->
+<!--              <td>-->
+<!--                <pre class="mb-0"><code class="language-python">openai.api_key = "YOUR_API_KEY"-->
+<!--openai.api_base = "https://api.deepseek.com"</code></pre>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--        </table>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!-- 参数配置 -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">基础配置</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped text-center w-100">
+            <thead>
+              <tr>
+                <th>配置项</th>
+                <th>值</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="fw-bold">API 地址</td>
+                <td><code>https://api.deepseek.com</code></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">认证方式</td>
+                <td><code>Bearer Token</code></td>
+              </tr>
+              <tr>
+                <td class="fw-bold">SDK 初始化</td>
+                <td>
+                  <pre class="mb-0 d-inline-block"><code class="language-python">openai.api_key = "YOUR_API_KEY"
+openai.api_base = "https://api.deepseek.com"</code></pre>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </div>
 
-    <!-- 调用方式 API -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <h2>调用方式 API</h2>
-            <p>下面展示如何使用 <strong>DeepSeek API Key</strong> 进行请求的示例。</p>
-        </div>
-    </div>
-
-    <!-- 标签页 -->
-    <div class="row">
-        <div class="col-12">
-            <ul class="nav nav-tabs" id="apiTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="curl-tab" data-bs-toggle="tab" data-bs-target="#curl" type="button" role="tab" aria-controls="curl" aria-selected="true">
-                        curl
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="python-tab" data-bs-toggle="tab" data-bs-target="#python" type="button" role="tab" aria-controls="python" aria-selected="false">
-                        python
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="node-tab" data-bs-toggle="tab" data-bs-target="#node" type="button" role="tab" aria-controls="node" aria-selected="false">
-                        nodejs
-                    </button>
-                </li>
-            </ul>
-
-
-            <!-- python -->
-            <div class="tab-pane fade" id="python" role="tabpanel" aria-labelledby="python-tab">
-
-                <pre><code class="language-python">
-                </code></pre>
-            </div>
-
-            <!-- nodejs -->
-            <div class="tab-pane fade" id="node" role="tabpanel" aria-labelledby="node-tab">
-                <pre><code class="language-javascript">
-                </code></pre>
-            </div>
-        </div>
-    </div>
+<!-- 测试阶段说明 -->
+<div class="alert alert-warning mt-3 d-flex align-items-center justify-content-center text-center" role="alert">
+  <i class="fas fa-exclamation-triangle me-2"></i>
+  目前正处于测试阶段，请联系我们并说明使用意图，获取API KEY
 </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- 代码示例 -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h3 class="border-bottom pb-2">代码示例</h3>
+    </div>
+  </div>
+
+  <!-- 语言切换标签 -->
+  <div class="row">
+    <div class="col-12">
+      <ul class="nav nav-tabs" id="apiExamples" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="curl-tab" data-bs-toggle="tab" data-bs-target="#curl" type="button" role="tab">cURL</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="python-tab" data-bs-toggle="tab" data-bs-target="#python" type="button" role="tab">Python</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="node-tab" data-bs-toggle="tab" data-bs-target="#nodejs" type="button" role="tab">Node.js</button>
+        </li>
+      </ul>
+
+      <div class="tab-content p-3 border bg-light rounded-bottom">
+        <!-- cURL示例 -->
+        <div class="tab-pane fade show active" id="curl" role="tabpanel">
+          <pre><code class="language-bash">curl -X POST https://api.deepseek.com/v1/chat/completions \
+-H "Authorization: Bearer YOUR_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "model",
+  "messages": [{"role": "user", "content": "<待检测文本>"}],
+  "max_tokens": 200
+}'</code></pre>
+        </div>
+
+        <!-- Python示例 -->
+        <div class="tab-pane fade" id="python" role="tabpanel">
+          <pre><code class="language-python">import openai
+
+openai.api_key = "YOUR_API_KEY"
+openai.api_base = "https://api.deepseek.com"
+
+response = openai.ChatCompletion.create(
+  model="model",
+  messages=[
+    {"role": "user", "content": "<待检测文本>"}
+  ],
+  temperature=0.7
+)
+
+print(response.choices[0].message.content)</code></pre>
+        </div>
+
+        <!-- Node.js示例 -->
+        <div class="tab-pane fade" id="nodejs" role="tabpanel">
+          <pre><code class="language-javascript">const { Configuration, OpenAIApi } = require("openai");
+
+const config = new Configuration({
+  apiKey: "YOUR_API_KEY",
+  basePath: "https://api.deepseek.com"
+});
+
+const openai = new OpenAIApi(config);
+
+async function generateText() {
+  const response = await openai.createChatCompletion({
+    model: "model",
+    messages: [
+      { role: "user", content: "<待检测文本>" }
+    ],
+    max_tokens: 150
+  });
+
+  console.log(response.data.choices[0].message.content);
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--      &lt;!&ndash; 注意事项 &ndash;&gt;-->
+<!--  <div class="row mt-4">-->
+<!--    <div class="col-12">-->
+<!--      <div class="alert alert-warning" role="alert">-->
+<!--        <h4 class="alert-heading">重要提示</h4>-->
+<!--        <ul>-->
+<!--          <li>目前正处于测试阶段，请联系我们并说明使用意图，获取API KEY</li>-->
+<!--          <li>内容安全：禁止投喂违法不良信息</li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 {% endblock %}
