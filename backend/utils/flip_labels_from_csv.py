@@ -1,18 +1,30 @@
+import random
+
 import numpy as np
 import pandas as pd
 
-def flip_labels(labels, flip_percentage=0.1):
+def flip_labels_from_csv(csv_file, label_column='label', flip_percentage=0.1):
     """
-    随机翻转数据集中每个类别的标签。  少数类数量自动计算。
+    从 CSV 文件读取数据，并随机翻转指定列中的标签。  少数类数量自动计算。
 
     Args:
-        data (np.ndarray or pd.DataFrame): 输入数据。
-        labels (np.ndarray or pd.Series): 数据的标签。
+        csv_file (str): CSV 文件的路径。
+        label_column (str): 包含标签的列的名称。默认为 'label'。
         flip_percentage (float): 翻转的百分比，基于少数类数量计算。 默认为 0.1 (10%)。
 
     Returns:
-        np.ndarray: 翻转后的标签。
+        pd.DataFrame: 包含翻转后标签的 DataFrame。
     """
+
+    # 读取 CSV 文件
+    df = pd.read_csv(csv_file)
+
+    # 检查标签列是否存在
+    if label_column not in df.columns:
+        raise ValueError(f"标签列 '{label_column}' 不存在于 CSV 文件中。")
+
+    # 获取标签
+    labels = df[label_column].values
 
     unique_labels = np.unique(labels)
     flipped_labels = labels.copy()  # 创建标签的副本，避免修改原始数据
@@ -43,32 +55,17 @@ def flip_labels(labels, flip_percentage=0.1):
             new_label = np.random.choice(other_labels)
             flipped_labels[index] = new_label
 
-    return flipped_labels
+    # 将翻转后的标签更新到 DataFrame
+    df[label_column] = flipped_labels
+    df.to_csv('../dataset/label01234-raw.csv', index=False)
+    return df
 
 
 if __name__ == '__main__':
-    # 示例用法
-    # 1. 创建一个模拟的五分类数据集
-    num_samples = 60
-    num_minority = 10  # 每个少数类的样本数量
-    num_majority = num_samples - 4 * num_minority # 多数类的样本数量
+    np.random.seed(42)
+    random.seed(42)
+    csv_file='../dataset/label01234-clean.csv'
+    label_column='label'
+    flip_percentage=0.1
+    flipped_df = flip_labels_from_csv(csv_file, label_column, flip_percentage)
 
-    # 创建标签
-    labels = np.concatenate([
-        np.zeros(num_majority),  # 多数类 (标签 0)
-        np.ones(num_minority),   # 少数类 (标签 1)
-        np.full(num_minority, 2), # 少数类 (标签 2)
-        np.full(num_minority, 3), # 少数类 (标签 3)
-        np.full(num_minority, 4)  # 少数类 (标签 4)
-    ])
-
-    # 创建一些随机数据 (这里只是为了演示，实际应用中替换成你的数据)
-    data = np.random.rand(num_samples, 10)
-
-    # 2. 设置翻转百分比
-    flip_percentage = 0.1  # 翻转 10% 的标签
-
-    # 3. 调用标签翻转函数
-    flipped_labels = flip_labels(labels, flip_percentage)
-
-    print(flipped_labels)
