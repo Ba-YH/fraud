@@ -22,9 +22,10 @@ def preprocess_text(text):
 
 # 使用处理数据时保存的模型在线处理输入数据
 def process_text(words):
-    word2vec_model = Word2Vec.load("models/word2vec.model")
-    scaler = joblib.load("models/scaler.pkl")
-    pca = joblib.load("models/pca.pkl")
+
+    word2vec_model = Word2Vec.load("backend/models/word2vec.model")
+    scaler = joblib.load("backend/models/scaler.pkl")
+    pca = joblib.load("backend/models/pca.pkl")
 
     if not words:
         return np.zeros(word2vec_model.vector_size)

@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 import time
 from backend.utils.process import *
+sys.path.insert(0, str(Path(__file__).parent.parent))  # 添加项目根目录到sys.path
 
 app = Flask(
     __name__,
@@ -411,16 +412,15 @@ def batch_process():
 
 
 def preprocess_text(text):
-    global stop_words
-    with open("utils/stop_words.txt", "r", encoding="UTF-8") as f:
+    # 获取当前文件（preprocess_text所在文件）的目录
+    current_dir = Path(__file__).parent
+    stop_words_path = current_dir / "utils" / "stop_words.txt"  # 根据实际目录调整路径
+
+    with open(stop_words_path, "r", encoding="UTF-8") as f:
         stop_words = set(word.strip() for word in f.readlines())
 
     words = jieba.lcut(text)
     return [word for word in words if word not in stop_words]
-
-# @app.route('/api/deepseek/generate', methods=['POST'])
-# def deepseek_generate():
-
 
 if __name__ == '__main__':
     try:
