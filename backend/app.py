@@ -35,6 +35,7 @@ stop_words=[]
 
 # 数据存储
 HISTORY_FILE = Path(__file__).parent / "data" / "history.json"
+VALID_API_KEY_FILE = Path(__file__).parent / "data" / "api_key.txt"
 HISTORY_FILE.parent.mkdir(exist_ok=True)
 
 LABEL_MAPPING = {
@@ -287,9 +288,8 @@ def process():
 # 兼容OpenAI 的接口
 @app.route('/v1/chat/completions', methods=['POST'])
 def chat_completions():
-    # 检查 API KEY 是否有效
     VALID_API_KEYS=[]
-    with open("data/api_key.txt", "r") as f:
+    with open(VALID_API_KEY_FILE, "r") as f:
         VALID_API_KEYS = [line.strip() for line in f if line.strip()]
 
     auth_header = request.headers.get("Authorization")
@@ -337,8 +337,8 @@ def chat_completions():
         prediction = best_model.predict_proba(processed_text.reshape(1, -1))
         label_idx = prediction.argmax()
         confidence = float(prediction.max())
-        result = [LABEL_MAPPING.get(label_idx, "未知"),confidence]
-
+        label=LABEL_MAPPING.get(label_idx, "未知")
+        result=f"模型预测结果为：{label}\n置信度水平：{confidence:.2f}%"
         # 构造标准 ChatCompletion 响应
         response = {
             "id": f"chatcmpl-{int(time.time())}",
