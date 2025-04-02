@@ -332,9 +332,9 @@ def main():
                                 break
                         # 保留从第一个不以@开头的行开始的所有数据
                         temp = temp0[start_index:]
-                    majority_label1 = '0'
+                    majority_label1 = '非欺诈信息'
                     # minority_label1 = ' 冒充公检法及政府机关类'
-                    majority_label2 = '0'
+                    majority_label2 = '非欺诈信息'
                     minority_label1 = '冒充公检法及政府机关类'
                     minority_label2 = '贷款、代办信用卡类'
                     minority_label3 = '冒充客服服务'
