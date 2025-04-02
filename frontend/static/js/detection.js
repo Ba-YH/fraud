@@ -107,27 +107,16 @@ document.addEventListener('DOMContentLoaded', function() {
         let riskClass = '';
         let riskText = '';
         if (data.result != '非欺诈信息') {
-            if (confidence >= 90) {
+            if (confidence >= 70) {
                 riskClass = 'bg-danger';
                 riskText = '高风险';
-            } else if (confidence >= 70) {
+            } else {
                 riskClass = 'bg-warning text-dark';
                 riskText = '中风险';
-            } else {
-                riskClass = 'bg-success';
-                riskText = '低风险';
             }
         } else {
-            if (confidence < 60) {
-                    riskClass = 'bg-danger';
-                    riskText = '高风险';
-               } else if (confidence < 80) {
-                    riskClass = 'bg-warning text-dark';
-                    riskText = '中风险';
-              } else {
-                    riskClass = 'bg-success';
-                    riskText = '低风险';
-             }
+            riskClass = 'bg-success';
+            riskText = '低风险';
         }
 
         riskLevel.className = `badge ${riskClass}`;

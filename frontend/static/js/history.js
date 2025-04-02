@@ -85,10 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getRiskLevel(confidence,result) {
-        if ((confidence >= 0.9 & result != '非欺诈信息') | (result == '非欺诈信息' & confidence < 0.6)) {
-            return { label: '高风险', class: 'bg-danger' };
-        } else if ((confidence >= 0.7 & result != '非欺诈信息') | (result == '非欺诈信息' & confidence < 0.8)) {
-            return { label: '中风险', class: 'bg-warning text-dark' };
+
+        if (result != '非欺诈信息') {
+            if (confidence >= 0.7) {
+                return { label: '高风险', class: 'bg-danger' };
+            } else {
+                return { label: '中风险', class: 'bg-warning text-dark' };
+            }
         } else {
             return { label: '低风险', class: 'bg-success' };
         }

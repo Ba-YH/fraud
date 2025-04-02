@@ -68,13 +68,19 @@ def save_detection_history(text, result, confidence):
             with open(HISTORY_FILE, 'r', encoding='utf-8') as f:
                 history = json.load(f)
 
-        history.append({
-            'id': len(history) + 1,
+        new_record = {
+            'id': 1,  # 新记录的 ID 应该是 1
             'text': text,
             'result': result,
             'confidence': confidence,
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        })
+        }
+
+        # 更新现有记录的 ID
+        for record in history:
+            record['id'] += 1
+
+        history.insert(0, new_record)  # 将新记录插入到列表的第一个位置
 
         # 只保留最近1000条记录
         history = history[-1000:]
