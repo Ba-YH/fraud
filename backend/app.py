@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import os,sys
+import os
 from datetime import datetime, timedelta
 import json
 import dill
@@ -8,6 +8,7 @@ import numpy as np
 from pathlib import Path
 import time
 from backend.utils.process import *
+import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))  # 添加项目根目录到sys.path
 
 app = Flask(
@@ -38,8 +39,8 @@ LABEL_MAPPING = {
 # 模型加载
 def load_model() -> None:
     global best_model
-    model_path = MODEL_DIR / MODEL_FILENAME
-    print(model_path)
+    current_dir = Path(__file__).parent
+    model_path = current_dir / "models" / "best_model.dill"
     try:
         with open(model_path, "rb") as f:
             best_model = dill.load(f)
@@ -425,9 +426,8 @@ def preprocess_text(text):
 if __name__ == '__main__':
     try:
         # 确保必要的目录存在
-        MODEL_DIR.mkdir(exist_ok=True)
-        HISTORY_FILE.parent.mkdir(exist_ok=True)
-
+        # MODEL_DIR.mkdir(exist_ok=True)
+        # HISTORY_FILE.parent.mkdir(exist_ok=True)
         # 加载模型
         load_model()
 

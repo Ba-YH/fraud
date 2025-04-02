@@ -9,6 +9,7 @@ from sklearn.decomposition import PCA
 import argparse
 import joblib
 import os
+from pathlib import Path
 
 stop_words=[]
 def read_data():
@@ -22,10 +23,13 @@ def preprocess_text(text):
 
 # 使用处理数据时保存的模型在线处理输入数据
 def process_text(words):
+    current_dir = Path(__file__).parent.parent
+    model_path = current_dir / "models"
 
-    word2vec_model = Word2Vec.load("backend/models/word2vec.model")
-    scaler = joblib.load("backend/models/scaler.pkl")
-    pca = joblib.load("backend/models/pca.pkl")
+    # 将 Path 对象转换为字符串
+    word2vec_model = Word2Vec.load(str(model_path / "word2vec.model"))
+    scaler = joblib.load(str(model_path / "scaler.pkl"))
+    pca = joblib.load(str(model_path / "pca.pkl"))
 
     if not words:
         return np.zeros(word2vec_model.vector_size)
