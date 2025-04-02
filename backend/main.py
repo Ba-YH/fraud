@@ -34,6 +34,7 @@ ar = 1
 
 
 class Fraud_detection(BaseEstimator, ClassifierMixin):
+    import numpy as np
     base_estimator = DecisionTreeClassifier()
     def __init__(self,
                  base_estimator=DecisionTreeClassifier(),
@@ -50,20 +51,24 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
         self.max_num = []
     @classmethod
     def fit_base_estimator(self, X, y):
+        import numpy as np
         """Private function used to train a single base estimator."""
         return sklearn.base.clone(self.base_estimator).fit(X, y)
 
     def random_under_sampling(self, X_maj, y_maj, X_min, y_min):
+        import numpy as np
         """Private function used to perform random under-sampling."""
         maj_idx = self.random_sampling(len(X_maj), len(X_min))
         X_train = np.concatenate([X_maj[maj_idx], X_min])
         y_train = np.concatenate([y_maj[maj_idx], y_min])
         return X_train, y_train
     def random_sampling(self, X_len, n):
+        import numpy as np
         np.random.seed(self.random_state)
         idx = np.random.choice(X_len, n, replace=True)
         return idx
     def get_samples(self, prob, sampling_cnt,tag):
+        import numpy as np
         sampled_bins = []
         step = (prob.max() - prob.min()) / sampling_cnt
         interval = np.arange(prob.min(), prob.max(), step)  # interval of bins
@@ -157,6 +162,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
         return sampled_bins
 
     def equalization_sampling(self, X_maj, y_maj,tag):
+        import numpy as np
         if tag == 1:
             prob_maj = self.y_pred_maj_min
         else:
@@ -177,6 +183,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
         return new_X_maj, new_y_maj,index
 
     def overlap_enhanced(self,X_maj):
+        import numpy as np
         from sklearn.metrics import pairwise_distances
         # 找到接近0.5的样本
         threshold = 0.05
@@ -205,6 +212,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
 
 
     def fit(self, X, y, label_maj=0, label_min=1):
+        import numpy as np
         self.estimators_ = []
         self.weight_ = []
         self.hard = []
@@ -270,6 +278,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
         return self
 
     def predict_proba(self, X):
+        import numpy as np
         w = np.array(self.weight_)
         w = w / w.sum()
         # print(f"w_len:{w},#estimators:{len(self.estimators_)}")
@@ -282,6 +291,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
     #     y_pred = self.predict_proba(X)
     #     return y_pred.argmax(axis=1)
     def predict(self, X):
+        import numpy as np
         y_pred_proba = self.predict_proba(X)  # 获取每个类别的预测概率
         y_pred = y_pred_proba.argmax(axis=1)   # 返回概率最大的类别索引
         return y_pred, y_pred_proba             # 返回预测类别和概率
@@ -292,6 +302,7 @@ class Fraud_detection(BaseEstimator, ClassifierMixin):
             y, self.predict_proba(X)[:, 1])
 
 def parse():
+    import numpy as np
     '''Parse system arguments.'''
     parser = argparse.ArgumentParser(
         description='General executing Ensemble method',
@@ -306,6 +317,7 @@ def parse():
     return parser.parse_args()
 
 def main():
+    import numpy as np
     algs = ['EASE']
     # ar_list = [1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3,3.1,3.2,3.3,3.4,3.5,3.6,3.7,3.8,3.9,4]
     ar_list = [10]
