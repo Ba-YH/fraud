@@ -3,13 +3,23 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 from datetime import datetime, timedelta
 import json
+import jieba
 import dill
 import numpy as np
 from pathlib import Path
 import time
-from backend.utils.process import *
+from backend.utils.process import process_text
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))  # 添加项目根目录到sys.path
+import logging
+
+logging.basicConfig(level=logging.DEBUG, # 设置最低级别
+                    stream=sys.stderr,     # 输出到stderr
+                    format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
+# 在你的代码中使用 logger
+logger = logging.getLogger(__name__)
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 app = Flask(
     __name__,
@@ -423,13 +433,20 @@ def preprocess_text(text):
     words = jieba.lcut(text)
     return [word for word in words if word not in stop_words]
 
+try:
+    load_model()
+except Exception as e:
+    # 使用 logger 记录严重错误，并可能决定是否让应用在此处失败
+    logger.critical(f"关键：模型加载失败，应用可能无法正常工作: {str(e)}")
+    # 根据需要，可以选择在这里 raise e 来阻止应用启动，或者让它带错误启动
+    # raise # 如果模型加载是绝对必要的，取消注释这行
 if __name__ == '__main__':
     try:
         # 确保必要的目录存在
         # MODEL_DIR.mkdir(exist_ok=True)
         # HISTORY_FILE.parent.mkdir(exist_ok=True)
         # 加载模型
-        load_model()
+
 
         # 启动应用
         app.run(host='0.0.0.0', port=5000, debug=False)
