@@ -117,15 +117,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // 设置风险等级
             let riskLevel = '';
             let riskClass = '';
-            if (result.confidence >= 0.9) {
-                riskLevel = '高风险';
-                riskClass = 'bg-danger';
-            } else if (result.confidence >= 0.7) {
-                riskLevel = '中风险';
-                riskClass = 'bg-warning text-dark';
+            if (result.result != '非欺诈信息') {
+                if (result.confidence >= 0.7) {
+                    riskClass = 'bg-danger';
+                    riskLevel = '高风险';
+                } else {
+                    riskClass = 'bg-warning text-dark';
+                    riskLevel = '中风险';
+                }
             } else {
-                riskLevel = '低风险';
                 riskClass = 'bg-success';
+                riskLevel = '低风险';
             }
 
             row.innerHTML = `
