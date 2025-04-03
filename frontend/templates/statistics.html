@@ -5,92 +5,242 @@
 {% block page_title %}数据统计{% endblock %}
 
 {% block content %}
-<div class="statistics-container">
-    <div class="row">
-        <!-- 总览卡片 -->
-        <div class="col-md-4">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <div class="stat-icon">
-                        <i class='bx bx-bar-chart-alt'></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="total-detections">0</h3>
-                        <p>总检测次数</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <div class="stat-icon warning">
-                        <i class='bx bx-error-circle'></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3><span id="fraud-ratio">0</span>%</h3>
-                        <p>欺诈信息比例</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stat-card">
-                <div class="card-body">
-                    <div class="stat-icon danger">
-                        <i class='bx bx-shield-quarter'></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="high-risk-count">0</h3>
-                        <p>高风险信息数</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<head>
+    <style>
+        .statistics-container {
+            padding: 1.5rem;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
 
-    <div class="row mt-4">
-        <!-- 欺诈类型分布 -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">欺诈类型分布</h5>
-                    <canvas id="type-distribution-chart"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- 每日检测趋势 -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">风险等级分布</h5>
-                    <canvas id="risk-distribution-chart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -0.75rem;
+        }
 
-    <div class="row mt-4">
-        <!-- 风险等级分布 -->
-        <div class="col-md-6">
-            <div class="card1">
-                <div class="card-body">
-                    <h5 class="card-title">每日检测趋势</h5>
-                    <canvas id="daily-trend-chart"></canvas>
+        .col-md-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+            padding: 0.75rem;
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0.75rem;
+        }
+
+        .stat-card, .chart-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .stat-card .card-body {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            background: #f0f7ff;
+            color: #2196f3;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.warning {
+            background: #fff8e1;
+            color: #ffa000;
+        }
+
+        .stat-icon.danger {
+            background: #ffeef0;
+            color: #ff4081;
+        }
+
+        .stat-icon i {
+            font-size: 28px;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-info h3 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .stat-info p {
+            color: #666;
+            margin: 4px 0 0 0;
+            font-size: 14px;
+        }
+
+        .chart-card .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .chart-container {
+            min-height: 300px;
+            position: relative;
+        }
+
+        .mt-4 {
+            margin-top: 1.5rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 992px) {
+            .col-md-4, .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .card-body {
+                padding: 1.25rem;
+            }
+
+            .stat-icon {
+                width: 48px;
+                height: 48px;
+            }
+
+            .stat-icon i {
+                font-size: 24px;
+            }
+
+            .stat-info h3 {
+                font-size: 24px;
+            }
+
+            .chart-container {
+                min-height: 250px;
+            }
+        }
+    </style>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="statistics-container">
+        <!-- 统计卡片行 -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon">
+                            <i class='bx bx-bar-chart-alt'></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-detections">0</h3>
+                            <p>总检测次数</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon warning">
+                            <i class='bx bx-error-circle'></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><span id="fraud-ratio">0</span>%</h3>
+                            <p>欺诈信息比例</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="card-body">
+                        <div class="stat-icon danger">
+                            <i class='bx bx-shield-quarter'></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="high-risk-count">0</h3>
+                            <p>高风险信息数</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- 置信度分布 -->
-        <div class="col-md-6">
-            <div class="card1">
-                <div class="card-body">
-                    <h5 class="card-title">置信度分布</h5>
-                    <canvas id="confidence-distribution-chart"></canvas>
+
+        <!-- 第一行图表 -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <div class="card-body">
+                        <h5 class="card-title">欺诈类型分布</h5>
+                        <div class="chart-container">
+                            <canvas id="type-distribution-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <div class="card-body">
+                        <h5 class="card-title">风险等级分布</h5>
+                        <div class="chart-container">
+                            <canvas id="risk-distribution-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二行图表 -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <div class="card-body">
+                        <h5 class="card-title">每日检测趋势</h5>
+                        <div class="chart-container">
+                            <canvas id="daily-trend-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <div class="card-body">
+                        <h5 class="card-title">置信度分布</h5>
+                        <div class="chart-container">
+                            <canvas id="confidence-distribution-chart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</body>
 {% endblock %}
 
 
