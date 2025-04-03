@@ -218,11 +218,10 @@ def get_statistics():
 
         # 统计风险等级分布
         risk_distribution = {
-            'high': sum(1 for r in history if r['confidence'] >= 0.8 and r['result'] != '非欺诈信息' or r['result'] == '冒充公检法及政府机关类' and r['confidence'] < 0.6 ),
-            'medium': sum(1 for r in history if 0.5 <= r['confidence'] < 0.8 and r['result'] != '非欺诈信息' or r['result'] == '冒充公检法及政府机关类' and r['confidence'] < 0.8),
-            'low': sum(1 for r in history if r['confidence'] < 0.5 and r['result'] != '非欺诈信息' or r['result'] == '冒充公检法及政府机关类' and r['confidence'] >= 0.8)
+            'high': sum(1 for r in history if r['result'] != '非欺诈信息' and r['confidence'] >= 0.7),
+            'medium': sum(1 for r in history if r['result'] != '非欺诈信息' and r['confidence'] < 0.7),
+            'low': sum(1 for r in history if r['result'] == '非欺诈信息')
         }
-
         # 统计置信度分布（按0.1区间划分）
         confidence_distribution = {}
         for i in range(0, 10):
