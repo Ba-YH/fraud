@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         filteredHistory = allHistory.filter(item => {
             const matchesSearch = item.text.toLowerCase().includes(searchTerm);
             const matchesType = !selectedType || item.result === selectedType;
-            const matchesRisk = applyRiskFilter(item.confidence, selectedRisk);
+            const matchesRisk = applyRiskFilter(item.confidence, selectedRisk, item.result);
             return matchesSearch && matchesType && matchesRisk;
         });
 
@@ -154,15 +154,22 @@ document.addEventListener('DOMContentLoaded', function() {
         updateTable();
     }
 
-    function applyRiskFilter(confidence, selectedRisk) {
+    function applyRiskFilter(confidence, selectedRisk, result) {
         if (!selectedRisk) return true;
+
+        // 先判断是否为非欺诈信息
+        if (result === '非欺诈信息') {
+            return selectedRisk === 'low';
+        }
+
+        // 欺诈信息的风险等级判断
         switch (selectedRisk) {
             case 'high':
-                return confidence >= 0.9;
+                return confidence >= 0.7;
             case 'medium':
-                return confidence >= 0.7 && confidence < 0.9;
-            case 'low':
                 return confidence < 0.7;
+            case 'low':
+                return false; // 欺诈信息不会有低风险
             default:
                 return true;
         }
