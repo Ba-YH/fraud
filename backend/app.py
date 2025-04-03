@@ -193,7 +193,9 @@ def get_statistics():
         fraud_ratio = fraud_count / total_detections if total_detections > 0 else 0
 
         # 计算高风险信息数量
-        high_risk_count = sum(1 for record in history if record['confidence'] >= 0.8)
+        # 计算高风险信息数量
+        high_risk_count = sum(1 for record in history
+                      if record['result'] != '非欺诈信息' and record['confidence'] >= 0.7)
 
         # 统计欺诈类型分布
         type_distribution = {}
